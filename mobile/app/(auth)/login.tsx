@@ -1,4 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { api } from '../../services/api';
@@ -11,9 +12,12 @@ export default function Login() {
         try {
             const res = await api.post('/users/login', { email, password });
             const role = res.data.user.role;
+            const id_user = res.data.user.id_user;
+
+            await AsyncStorage.setItem('id_user', id_user.toString());
 
             if (role === 'penjual') {
-                router.replace('/(seller)');
+                router.replace('/(seller)/dashboard');
             } else {
                 router.replace('/(buyer)');
             }

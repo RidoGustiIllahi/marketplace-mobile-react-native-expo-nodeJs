@@ -180,7 +180,7 @@ export default function Register() {
                         setValue={setProvince}
                         setItems={setProvinces}
                         placeholder="Pilih Provinsi"
-                        listMode="SCROLLVIEW" // Lebih stabil di dalam ScrollView
+                        listMode="SCROLLVIEW"
                         style={styles.dropdown}
                         dropDownContainerStyle={styles.dropdownContainer}
                         placeholderStyle={styles.placeholderStyle}
@@ -240,9 +240,14 @@ export default function Register() {
                         placeholderStyle={styles.placeholderStyle}
                         zIndex={1000}
                         zIndexInverse={4000}
+                        onChangeValue={(value) => {
+                            if (value) {
+                                setAddress(value);
+                            }
+                        }}
                     />
 
-                    <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                    < TouchableOpacity style={styles.button} onPress={handleRegister} >
                         <Text style={styles.buttonText}>Daftar Sekarang</Text>
                     </TouchableOpacity>
 
@@ -253,7 +258,7 @@ export default function Register() {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 }
 
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 12,
         elevation: 3,
-        shadowColor: '#000', 
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
     },

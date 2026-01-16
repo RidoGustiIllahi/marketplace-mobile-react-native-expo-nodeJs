@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         description: DataTypes.TEXT,
+
+        image: {
+            type: DataTypes.STRING, // simpan path / nama file
+            allowNull: true
+        },
+
         price: {
             type: DataTypes.DECIMAL(15, 2),
             allowNull: false
@@ -20,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         weight: {
-            type: DataTypes.DECIMAL(2, 1),
+            type: DataTypes.DECIMAL(5, 2), // diperbesar biar aman
             allowNull: false
         },
         id_user: {
@@ -34,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
             onUpdate: 'CASCADE'
         }
     }, {
-        tableName: 'products'
+        tableName: 'products',
+        timestamps: true
     });
 
     Product.associate = (models) => {
@@ -42,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'id_user',
             as: 'user'
         });
-        
+
         Product.hasMany(models.order, {
             foreignKey: 'id_product',
             as: 'orders'
