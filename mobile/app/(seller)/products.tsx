@@ -4,12 +4,15 @@ import SellerHeader from '../../components/SellerHeader';
 import { getProducts, deleteProduct } from '../../services/productService';
 import ProductForm from './ProductForm';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image } from 'react-native';
 
 export default function Products() {
     const [products, setProducts] = useState<any[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
-    
+
+    const IMAGE_URL = 'http://10.22.209.58:3001/';
+
     const loadProducts = async () => {
         const id_user = await AsyncStorage.getItem('id_user');
         const res = await getProducts(Number(id_user));
@@ -60,10 +63,23 @@ export default function Products() {
                         keyExtractor={(item) => item.id_product.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.card}>
-                                <Text style={styles.name}>{item.name}</Text>
-                                <Text>Rp {item.price}</Text>
-                                <Text>Stok: {item.stock_quantity}</Text>
 
+                                {/* GAMBAR PRODUK */}
+                                {item.image && (
+                                    <Image
+                                        source={{ uri: IMAGE_URL + item.image }}
+                                        style={styles.image}
+                                    />
+                                )}
+
+                                {/* INFO PRODUK */}
+                                <Text style={styles.name}>{item.name}</Text>
+                                <Text style={styles.description}>{item.description}</Text>
+
+                                <Text style={styles.price}>Rp {item.price}</Text>
+                                <Text style={styles.stock}>Stok: {item.stock_quantity}</Text>
+
+                                {/* ACTION */}
                                 <View style={styles.actions}>
                                     <TouchableOpacity
                                         onPress={() => {
@@ -83,6 +99,7 @@ export default function Products() {
                             </View>
                         )}
                     />
+
                 </View>
             )}
         </View>
@@ -120,5 +137,30 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         borderRadius: 5,
+    },
+    image: {
+        width: '100%',
+        height: 180,
+        borderRadius: 8,
+        marginBottom: 10,
+        resizeMode: 'cover',
+    },
+
+    description: {
+        fontSize: 13,
+        color: '#555',
+        marginBottom: 6,
+    },
+
+    price: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#1e90ff',
+    },
+
+    stock: {
+        fontSize: 12,
+        color: '#444',
+        marginBottom: 8,
     },
 });
