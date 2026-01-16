@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         address: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(20),
             allowNull: false
         }
     }, {
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'id_user',
             as: 'products'
         });
-        
+
         User.hasMany(models.order, {
             foreignKey: 'id_user',
             as: 'orders'

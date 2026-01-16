@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
  */
 router.post("/register", async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, address } = req.body;
 
         if (!name || !email || !password || !role) {
             return res.status(400).json({ message: "Data tidak lengkap" });
@@ -45,7 +45,8 @@ router.post("/register", async (req, res) => {
             name,
             email,
             password,
-            role
+            role,
+            address
         });
 
         res.status(201).json({
@@ -54,7 +55,8 @@ router.post("/register", async (req, res) => {
                 id_user: newUser.id_user,
                 name: newUser.name,
                 email: newUser.email,
-                role: newUser.role
+                role: newUser.role,
+                address: newUser.address
             }
         });
     } catch (error) {
