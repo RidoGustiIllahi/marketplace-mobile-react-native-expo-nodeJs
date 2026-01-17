@@ -19,7 +19,7 @@ export default function Login() {
             if (role === 'penjual') {
                 router.replace('/(seller)/dashboard');
             } else {
-                router.replace('/(buyer)');
+                router.replace('/(buyer)/products');
             }
         } catch (err: any) {
             Alert.alert('Login Gagal', err.response?.data?.message || 'Terjadi kesalahan sistem');
