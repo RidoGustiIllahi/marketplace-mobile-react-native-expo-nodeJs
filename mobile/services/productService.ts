@@ -1,18 +1,21 @@
 import { api } from './api';
 
-export const getProducts = (id_user: number) => api.get(`/products/user/${id_user}`, {
-  headers: { 'Content-Type': 'multipart/form-data' },
-});
+export const getProductsByUser = (id_user: number) => {
+  return api.get(`/products/user/${id_user}`);
+};
 
-export const createProduct = (data: any) =>
-  api.post('/products', data, {
+export const createProduct = (data: FormData) => {
+  return api.post('/products', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+};
 
-export const updateProduct = (id: number, data: any) =>
-  api.put(`/products/${id}`, data, {
+export const updateProduct = (id: number, data: FormData) => {
+  return api.put(`/products/${id}`, data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+};
 
-export const deleteProduct = (id: number) =>
-  api.delete(`/products/${id}`);
+export const deleteProductById = (id: number) => {
+  return api.delete(`/products/${id}`);
+};

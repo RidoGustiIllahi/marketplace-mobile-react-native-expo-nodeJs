@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
-import SellerBottomNav from '../../components/SellerBottomNav';
+import SellerBottomNav from '../../components/seller/SellerBottomNav';
 
 export default function SellerLayout() {
     return (

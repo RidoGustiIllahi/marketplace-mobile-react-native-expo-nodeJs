@@ -1,301 +1,244 @@
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+    ScrollView,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
-import { createProduct, updateProduct } from '../../services/productService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as ImagePicker from 'expo-image-picker';
+import { useProductForm } from '../../hooks/seller/useProductForm';
 
 export default function ProductForm({ product, onClose }: any) {
-    const [name, setName] = useState(product?.name || '');
-    const [price, setPrice] = useState(product?.price?.toString() || '');
-    const [stock, setStock] = useState(product?.stock_quantity?.toString() || '');
-    const [description, setDescription] = useState(product?.description || '');
-    const [weight, setWeight] = useState(product?.weight?.toString() || '');
-    const [image, setImage] = useState<any>(null);
-    const [loading, setLoading] = useState(false);
-
-    const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 0.8,
-        });
-
-        if (!result.canceled) {
-            setImage(result.assets[0]);
-        }
-    };
-
-    const submit = async () => {
-        const id_user = await AsyncStorage.getItem('id_user');
-
-        if (!id_user) {
-            Alert.alert('Error', 'User belum login');
-            return;
-        }
-
-        if (!name || !price || !stock || !description || !weight || (!image && !product)) {
-            Alert.alert('Error', 'Semua field wajib diisi');
-            return;
-        }
-
-        const formData = new FormData();
-
-        formData.append('name', name);
-        formData.append('price', price);
-        formData.append('stock_quantity', stock);
-        formData.append('description', description);
-        formData.append('weight', weight);
-        formData.append('id_user', id_user);
-
-        if (image) {
-            formData.append('image', {
-                uri: image.uri,
-                name: 'product.jpg',
-                type: 'image/jpeg',
-            } as any);
-        }
-
-        try {
-            setLoading(true);
-            if (product) {
-                await updateProduct(product.id_product, formData);
-            } else {
-                await createProduct(formData);
-            }
-
-            onClose();
-        } catch (err: any) {
-            Alert.alert('Error', err.response?.data?.message || 'Gagal menyimpan');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        name, setName,
+        price, setPrice,
+        stock, setStock,
+        description, setDescription,
+        weight, setWeight,
+        image, pickImage,
+        submit, loading, isEdit,
+    } = useProductForm(product, onClose);
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.formContainer}>
-            <View style={styles.headerRow}>
-                <Text style={styles.formTitle}>{product ? 'Edit Produk' : 'Tambah Produk Baru'}</Text>
-                <TouchableOpacity onPress={onClose}>
-                    <Ionicons name="close-circle" size={28} color="#999" />
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.card}>
-                {/* INPUT NAMA */}
-                <Text style={styles.label}>Nama Produk</Text>
-                <TextInput
-                    placeholder="Contoh: Sepatu Lari Ultra"
-                    value={name}
-                    onChangeText={setName}
-                    style={styles.input}
-                />
-
-                {/* INPUT DESKRIPSI */}
-                <Text style={styles.label}>Deskripsi</Text>
-                <TextInput
-                    placeholder="Jelaskan detail produk Anda..."
-                    value={description}
-                    onChangeText={setDescription}
-                    style={[styles.input, styles.textArea]}
-                    multiline
-                    textAlignVertical="top"
-                />
-
-                <View style={styles.row}>
-                    <View style={styles.flex1}>
-                        <Text style={styles.label}>Harga (Rp)</Text>
-                        <TextInput
-                            placeholder="0"
-                            keyboardType="numeric"
-                            value={price}
-                            onChangeText={setPrice}
-                            style={styles.input}
-                        />
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+        >
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                <View style={styles.header}>
+                    <View>
+                        <Text style={styles.title}>
+                            {isEdit ? 'Update Produk' : 'Produk Baru'}
+                        </Text>
+                        <Text style={styles.subtitle}>Lengkapi detail informasi produk Anda</Text>
                     </View>
-                    <View style={{ width: 15 }} />
-                    <View style={styles.flex1}>
-                        <Text style={styles.label}>Stok</Text>
-                        <TextInput
-                            placeholder="0"
-                            keyboardType="numeric"
-                            value={stock}
-                            onChangeText={setStock}
-                            style={styles.input}
-                        />
-                    </View>
+                    <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                        <Ionicons name="close-circle" size={32} color="#E0E0E0" />
+                    </TouchableOpacity>
                 </View>
 
-                <Text style={styles.label}>Berat (kg)</Text>
-                <TextInput
-                    placeholder="0.0"
-                    keyboardType="decimal-pad"
-                    value={weight}
-                    onChangeText={setWeight}
-                    style={styles.input}
-                />
-
-                {/* BAGIAN GAMBAR */}
-                <Text style={styles.label}>Foto Produk</Text>
-                <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-                    {image ? (
-                        <View style={styles.imagePreviewContainer}>
-                            <Image source={{ uri: image.uri }} style={styles.previewImage} />
-                            <View style={styles.changeImageOverlay}>
-                                <Ionicons name="camera" size={20} color="#fff" />
-                                <Text style={styles.changeImageText}>Ganti Foto</Text>
+                <View style={styles.formCard}>
+                    {/* Section: Foto */}
+                    <Text style={styles.label}>Foto Produk</Text>
+                    <TouchableOpacity style={styles.imageUploadBox} onPress={pickImage} activeOpacity={0.7}>
+                        {image ? (
+                            <View>
+                                <Image source={{ uri: image.uri }} style={styles.previewImage} />
+                                <View style={styles.editImageBadge}>
+                                    <Ionicons name="camera" size={16} color="#fff" />
+                                </View>
                             </View>
-                        </View>
-                    ) : (
-                        <View style={styles.placeholderBox}>
-                            <Ionicons name="cloud-upload-outline" size={40} color="#007AFF" />
-                            <Text style={styles.placeholderText}>Unggah Foto Produk</Text>
-                        </View>
-                    )}
-                </TouchableOpacity>
-
-                {/* TOMBOL AKSI */}
-                <View style={styles.buttonGroup}>
-                    <TouchableOpacity
-                        style={[styles.btn, styles.btnSubmit]}
-                        onPress={submit}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <ActivityIndicator color="#fff" />
                         ) : (
-                            <Text style={styles.btnSubmitText}>Simpan Produk</Text>
+                            <View style={styles.placeholderBox}>
+                                <View style={styles.iconCircle}>
+                                    <Ionicons name="cloud-upload" size={30} color="#007AFF" />
+                                </View>
+                                <Text style={styles.uploadText}>Ketuk untuk upload foto</Text>
+                                <Text style={styles.uploadHint}>Format JPG, PNG (Maks. 5MB)</Text>
+                            </View>
                         )}
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.btn, styles.btnCancel]} onPress={onClose}>
-                        <Text style={styles.btnCancelText}>Batal</Text>
-                    </TouchableOpacity>
+                    {/* Section: Info Produk */}
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Nama Produk</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Contoh: Sepatu Lari Pro"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Deskripsi Produk</Text>
+                        <TextInput
+                            style={[styles.input, styles.textArea]}
+                            multiline
+                            numberOfLines={4}
+                            textAlignVertical="top"
+                            placeholder="Ceritakan keunggulan produk Anda..."
+                            value={description}
+                            onChangeText={setDescription}
+                        />
+                    </View>
+
+                    <View style={styles.row}>
+                        <View style={styles.flex}>
+                            <Text style={styles.label}>Harga (Rp)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="0"
+                                keyboardType="numeric"
+                                value={price}
+                                onChangeText={setPrice}
+                            />
+                        </View>
+                        <View style={{ width: 16 }} />
+                        <View style={styles.flex}>
+                            <Text style={styles.label}>Stok</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="0"
+                                keyboardType="numeric"
+                                value={stock}
+                                onChangeText={setStock}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Berat (Kg)</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="0.0"
+                            keyboardType="decimal-pad"
+                            value={weight}
+                            onChangeText={setWeight}
+                        />
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={[styles.submitBtn, loading && styles.btnDisabled]}
+                            onPress={submit}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <ActivityIndicator color="#fff" />
+                            ) : (
+                                <>
+                                    <Ionicons name="checkmark-circle" size={20} color="#fff" style={{ marginRight: 8 }} />
+                                    <Text style={styles.submitText}>{isEdit ? 'Simpan Perubahan' : 'Terbitkan Produk'}</Text>
+                                </>
+                            )}
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
+                            <Text style={styles.cancelText}>Batal</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    formContainer: {
-        flex: 1,
-        backgroundColor: '#F8F9FA',
-    },
-    headerRow: {
+    container: { flex: 1, backgroundColor: '#FBFBFB' },
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
     },
-    formTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    card: {
+    title: { fontSize: 24, fontWeight: 'bold', color: '#1A1A1A' },
+    subtitle: { fontSize: 13, color: '#777', marginTop: 2 },
+    formCard: {
         backgroundColor: '#fff',
-        marginHorizontal: 20,
+        margin: 20,
         borderRadius: 20,
         padding: 20,
-        marginBottom: 30,
-        elevation: 4,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.05,
         shadowRadius: 10,
+        elevation: 2,
     },
-    label: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#555',
-        marginBottom: 8,
-        marginTop: 12,
-    },
+    inputGroup: { marginBottom: 18 },
+    label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 8 },
     input: {
-        backgroundColor: '#F9F9F9',
-        borderWidth: 1,
-        borderColor: '#EEE',
+        backgroundColor: '#F5F7FA',
+        paddingHorizontal: 15,
+        paddingVertical: 12,
         borderRadius: 12,
-        padding: 12,
         fontSize: 15,
         color: '#333',
+        borderWidth: 1,
+        borderColor: '#EDF0F3',
     },
-    textArea: {
-        height: 100,
-    },
-    row: {
-        flexDirection: 'row',
-    },
-    flex1: {
-        flex: 1,
-    },
-    imagePicker: {
-        marginTop: 5,
-        marginBottom: 20,
-    },
-    placeholderBox: {
-        height: 150,
-        backgroundColor: '#F0F7FF',
+    textArea: { height: 100 },
+    row: { flexDirection: 'row', marginBottom: 18 },
+    flex: { flex: 1 },
+    imageUploadBox: {
+        width: '100%',
+        height: 180,
+        backgroundColor: '#F5F7FA',
         borderRadius: 15,
+        marginBottom: 20,
         borderStyle: 'dashed',
         borderWidth: 2,
-        borderColor: '#007AFF',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    placeholderText: {
-        color: '#007AFF',
-        marginTop: 8,
-        fontWeight: '500',
-    },
-    imagePreviewContainer: {
-        height: 200,
-        borderRadius: 15,
+        borderColor: '#D1D9E6',
         overflow: 'hidden',
     },
-    previewImage: {
-        width: '100%',
-        height: '100%',
-    },
-    changeImageOverlay: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        flexDirection: 'row',
+    placeholderBox: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    iconCircle: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#E5F1FF',
         justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 8,
-    },
-    changeImageText: {
-        color: '#fff',
-        marginLeft: 5,
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
-    buttonGroup: {
-        marginTop: 10,
-    },
-    btn: {
-        borderRadius: 12,
-        padding: 16,
         alignItems: 'center',
         marginBottom: 10,
     },
-    btnSubmit: {
+    uploadText: { fontSize: 14, fontWeight: '600', color: '#007AFF' },
+    uploadHint: { fontSize: 11, color: '#999', marginTop: 4 },
+    previewImage: { width: '100%', height: '100%', resizeMode: 'cover' },
+    editImageBadge: {
+        position: 'absolute',
+        right: 10,
+        bottom: 10,
+        backgroundColor: 'rgba(0,0,0,0.6)',
+        padding: 8,
+        borderRadius: 20,
+    },
+    buttonContainer: { marginTop: 10 },
+    submitBtn: {
         backgroundColor: '#007AFF',
+        flexDirection: 'row',
+        height: 55,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#007AFF',
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 4,
     },
-    btnSubmitText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
+    btnDisabled: { backgroundColor: '#A0CFFF' },
+    submitText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+    cancelBtn: {
+        marginTop: 15,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    btnCancel: {
-        backgroundColor: '#F2F2F7',
-    },
-    btnCancelText: {
-        color: '#FF3B30',
-        fontWeight: '600',
-    },
+    cancelText: { color: '#FF3B30', fontWeight: '600', fontSize: 15 },
 });

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import LogoutButton from './LogoutButton';
+import LogoutButton from '../LogoutButton';
 
 type Props = {
     title: string;
@@ -19,16 +19,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 50,
-        paddingBottom: 20,
         paddingHorizontal: 20,
-        backgroundColor: '#FFF',
+        paddingTop: 50,
+        paddingVertical: 15,
+        backgroundColor: '#fff',
         borderBottomWidth: 1,
-        borderBottomColor: '#E5E5EA',
+        borderBottomColor: '#F0F0F0',
     },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: '#1C1C1E',
-    },
+    title: { fontSize: 20, fontWeight: 'bold', color: '#1A1A1A' }
 });

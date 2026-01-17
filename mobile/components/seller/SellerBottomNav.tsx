@@ -40,22 +40,13 @@ export default function SellerBottomNav() {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: '#FFF',
-        paddingVertical: 10,
+        height: 70,
+        backgroundColor: '#fff',
         borderTopWidth: 1,
-        borderTopColor: '#E5E5EA',
+        borderTopColor: '#F0F0F0',
+        paddingBottom: 10,
     },
-    tab: {
-        alignItems: 'center',
-    },
-    label: {
-        fontSize: 12,
-        color: '#8E8E93',
-        marginTop: 2,
-    },
-    active: {
-        color: '#007AFF',
-        fontWeight: '600',
-    },
+    tab: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    label: { fontSize: 11, marginTop: 4, color: '#8E8E93' },
+    active: { color: '#007AFF', fontWeight: 'bold' }
 });

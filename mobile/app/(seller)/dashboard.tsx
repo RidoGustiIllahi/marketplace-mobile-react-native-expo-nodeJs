@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import SellerHeader from '../../components/SellerHeader';
+import SellerHeader from '../../components/seller/SellerHeader';
 
 export default function SellerDashboard() {
     return (
