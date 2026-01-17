@@ -15,7 +15,7 @@ import { api } from '../../services/api';
 import { Picker } from '@react-native-picker/picker';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getVillageDetail } from '../../services/regionService';
+import { getVillageByCode } from '../../services/regionService';
 
 
 const IMAGE_URL = 'http://10.22.209.58:3001/';
@@ -37,26 +37,28 @@ export default function BuyerProducts() {
         if (!selectedProduct) return;
 
         const loadAddress = async () => {
-            // BUYER
-            const buyerId = await AsyncStorage.getItem('id_user');
-            const buyerRes = await api.get(`/users/${buyerId}`);
+            try {
+                // BUYER
+                const buyerId = await AsyncStorage.getItem('id_user');
+                const buyerRes = await api.get(`/users/${buyerId}`);
 
-            const buyerVillage = await getVillageDetail(
-                buyerRes.data.address
-            );
+                const buyerVillage = await getVillageByCode(
+                    buyerRes.data.address
+                );
+                setBuyerAddress(buyerVillage);
 
-            setBuyerAddress(buyerVillage.data.data);
+                // SELLER
+                const sellerRes = await api.get(
+                    `/users/${selectedProduct.id_user}`
+                );
 
-            // SELLER
-            const sellerRes = await api.get(
-                `/users/${selectedProduct.id_user}`
-            );
-
-            const sellerVillage = await getVillageDetail(
-                sellerRes.data.address
-            );
-
-            setSellerAddress(sellerVillage.data.data);
+                const sellerVillage = await getVillageByCode(
+                    sellerRes.data.address
+                );
+                setSellerAddress(sellerVillage);
+            } catch (error) {
+                console.error('Load address error:', error);
+            }
         };
 
         loadAddress();

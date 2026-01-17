@@ -37,3 +37,11 @@ export const getVillages = async (districtCode: string) => {
     );
     return res.data.data;
 };
+
+export const getVillageByCode = async (villageCode: string) => {
+    const res = await axios.get(
+        `https://use.api.co.id/regional/indonesia/villages/${villageCode}`,
+        headers
+    );
+    return res.data.data;
+};
