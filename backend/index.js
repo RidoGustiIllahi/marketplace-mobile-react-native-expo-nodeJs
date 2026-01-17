@@ -9,10 +9,12 @@ app.use(cors());
 
 const userRoutes = require('./routes/User');
 const productRoutes = require('./routes/product');
+const orderRoutes = require("./routes/order");
 
 app.use('/api/users', userRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 db.sequelize.sync().then(() => {
   app.listen(3001, () => {

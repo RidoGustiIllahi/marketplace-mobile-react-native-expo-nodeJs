@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import { useOrder } from "../../hooks/buyer/useOrder";
 import BuyerHeader from '../BuyerHeader';
 
 const IMAGE_URL = 'http://10.22.209.58:3001/';
@@ -9,6 +10,7 @@ export default function CheckoutScreen({ product, quantity, setQuantity, buyerAd
     const productTotal = Number(product.price) * quantity;
     const shippingCost = selectedCourier ? Number(selectedCourier.price) : 0;
     const totalPay = productTotal + shippingCost;
+    const { placeOrder, loading } = useOrder();
 
     return (
         <SafeAreaView style={styles.container}>
@@ -97,11 +99,22 @@ export default function CheckoutScreen({ product, quantity, setQuantity, buyerAd
                 )}
 
                 <TouchableOpacity
-                    style={[styles.mainBtn, !selectedCourier && styles.disabledBtn]}
-                    disabled={!selectedCourier}
-                    onPress={() => alert('Pesanan diproses!')}
+                    style={[styles.mainBtn, (!selectedCourier || loading) && styles.disabledBtn]}
+                    disabled={!selectedCourier || loading}
+                    onPress={() =>
+                        placeOrder({
+                            id_product: product.id_product,
+                            quantity,
+                            shipping_price: shippingCost,
+                            onSuccess: onBack
+                        })
+                    }
                 >
-                    <Text style={styles.mainBtnText}>Bayar Sekarang</Text>
+                    {loading ? (
+                        <ActivityIndicator color="#fff" />
+                    ) : (
+                        <Text style={styles.mainBtnText}>Bayar Sekarang</Text>
+                    )}
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={onBack} style={styles.backBtn}>
