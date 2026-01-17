@@ -1,68 +1,105 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    Dimensions,
+} from 'react-native';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { api } from '../../services/api';
+import { loginService } from '../../services/authService';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width } = Dimensions.get('window');
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert('Validasi', 'Email dan password wajib diisi');
+            return;
+        }
+
         try {
-            const res = await api.post('/users/login', { email, password });
-            const role = res.data.user.role;
-            const id_user = res.data.user.id_user;
-
-            await AsyncStorage.setItem('id_user', id_user.toString());
-
-            if (role === 'penjual') {
+            setLoading(true);
+            const result = await loginService({ email, password });
+            if (result.role === 'penjual') {
                 router.replace('/(seller)/dashboard');
             } else {
                 router.replace('/(buyer)/products');
             }
-        } catch (err: any) {
-            Alert.alert('Login Gagal', err.response?.data?.message || 'Terjadi kesalahan sistem');
+        } catch (error: any) {
+            Alert.alert('Login Gagal', error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <KeyboardAvoidingView 
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
+            <LinearGradient
+                colors={['#4c669f', '#3b5998', '#192f6a']}
+                style={styles.background}
+            />
+
             <View style={styles.card}>
-                <Text style={styles.title}>Selamat Datang</Text>
-                <Text style={styles.subtitle}>Silakan masuk ke akun Anda</Text>
-
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Email</Text>
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="contoh@email.com" 
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                <View style={styles.headerSection}>
+                    <Text style={styles.title}>Selamat Datang</Text>
+                    <Text style={styles.subtitle}>Silakan masuk untuk melanjutkan</Text>
                 </View>
 
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Password</Text>
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Masukkan password" 
-                        secureTextEntry 
-                        onChangeText={setPassword} 
-                    />
+                <View style={styles.form}>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Email</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="contoh@email.com"
+                            placeholderTextColor="#999"
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Masukkan password"
+                            placeholderTextColor="#999"
+                            secureTextEntry
+                            onChangeText={setPassword}
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.button, loading && styles.buttonDisabled]}
+                        onPress={handleLogin}
+                        disabled={loading}
+                        activeOpacity={0.8}
+                    >
+                        <Text style={styles.buttonText}>
+                            {loading ? 'Memproses...' : 'Masuk ke Akun'}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
+                <TouchableOpacity
+                    onPress={() => router.push('/(auth)/register')}
+                    style={styles.footerLink}
+                >
                     <Text style={styles.footerText}>
-                        Belum punya akun? <Text style={styles.link}>Daftar Sekarang</Text>
+                        Belum punya akun? <Text style={styles.linkText}>Daftar Sekarang</Text>
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -73,32 +110,43 @@ export default function Login() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
         justifyContent: 'center',
-        padding: 20,
+        alignItems: 'center',
+    },
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%',
     },
     card: {
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
+        width: width * 0.9,
+        backgroundColor: 'white',
+        borderRadius: 25,
         padding: 30,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 5,
+        shadowRadius: 20,
+        elevation: 10,
+    },
+    headerSection: {
+        marginBottom: 30,
+        alignItems: 'center',
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#333',
-        textAlign: 'center',
+        color: '#1a1a1a',
         marginBottom: 8,
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 15,
         color: '#666',
-        textAlign: 'center',
-        marginBottom: 30,
+    },
+    form: {
+        width: '100%',
     },
     inputContainer: {
         marginBottom: 20,
@@ -111,38 +159,44 @@ const styles = StyleSheet.create({
         marginLeft: 4,
     },
     input: {
-        backgroundColor: '#f9f9f9',
-        borderWidth: 1,
-        borderColor: '#ddd',
+        backgroundColor: '#f5f7fa',
+        paddingHorizontal: 15,
+        paddingVertical: 12,
         borderRadius: 12,
-        padding: 15,
         fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#eee',
     },
     button: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#3b5998',
+        paddingVertical: 15,
         borderRadius: 12,
-        padding: 16,
         alignItems: 'center',
         marginTop: 10,
-        shadowColor: '#007AFF',
+        shadowColor: '#3b5998',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
-        elevation: 3,
+        elevation: 5,
+    },
+    buttonDisabled: {
+        backgroundColor: '#9eb1d8',
     },
     buttonText: {
-        color: '#fff',
-        fontSize: 18,
+        color: 'white',
+        fontSize: 16,
         fontWeight: 'bold',
     },
-    footerText: {
+    footerLink: {
         marginTop: 25,
-        textAlign: 'center',
-        color: '#666',
-        fontSize: 14,
+        alignItems: 'center',
     },
-    link: {
-        color: '#007AFF',
+    footerText: {
+        fontSize: 14,
+        color: '#666',
+    },
+    linkText: {
+        color: '#3b5998',
         fontWeight: 'bold',
     },
 });
