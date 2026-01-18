@@ -5,7 +5,8 @@ import {
     FlatList,
     Image,
     ActivityIndicator,
-    RefreshControl
+    RefreshControl,
+    Alert
 } from 'react-native';
 import BuyerHeader from '../../components/buyer/BuyerHeader';
 import BuyerBottomNav from '../../components/buyer/BuyerBottomNav';
@@ -14,7 +15,8 @@ import { useBuyerOrders } from '../../hooks/buyer/useBuyerOrders';
 const IMAGE_URL = 'http://10.22.209.58:3001/';
 
 export default function BuyerOrders() {
-    const { orders, loading, refresh } = useBuyerOrders();
+    const { orders, loading, refresh, changeStatus } = useBuyerOrders();
+
 
     const renderItem = ({ item }: any) => (
         <View style={styles.card}>
@@ -47,6 +49,60 @@ export default function BuyerOrders() {
                     {new Date(item.createdAt).toLocaleDateString()}
                 </Text>
             </View>
+
+            <View style={styles.footer}>
+                <View>
+                    <Text style={[
+                        styles.status,
+                        styles[item.status as keyof typeof styles]
+                    ]}>
+                        {item.status.toUpperCase()}
+                    </Text>
+                    <Text style={styles.date}>
+                        {new Date(item.createdAt).toLocaleDateString()}
+                    </Text>
+                </View>
+
+                {/* ACTION BUTTON */}
+                {item.status === "ordered" && (
+                    <Text
+                        style={styles.cancelBtn}
+                        onPress={() => {
+                            Alert.alert(
+                                "Konfirmasi",
+                                "Yakin ingin membatalkan pesanan?",
+                                [
+                                    { text: "Batal", style: "cancel" },
+                                    { text: "Ya", onPress: () => changeStatus(item.id_order, "cancelled") }
+                                ]
+                            );
+                        }
+                        }
+                    >
+                        Batalkan
+                    </Text>
+                )}
+
+                {item.status === "shipped" && (
+                    <Text
+                        style={styles.completeBtn}
+                        onPress={() => {
+                            Alert.alert(
+                                "Konfirmasi",
+                                "Konfirmasi pesanan sudah diterima?",
+                                [
+                                    { text: "Belum", style: "cancel" },
+                                    { text: "Sudah", onPress: () => changeStatus(item.id_order, "completed") }
+                                ]
+                            );
+                        }
+                        }
+                    >
+                        Pesanan Selesai
+                    </Text>
+                )}
+            </View>
+
         </View>
     );
 
@@ -83,6 +139,19 @@ export default function BuyerOrders() {
 }
 
 const styles = StyleSheet.create({
+
+    cancelBtn: {
+        color: "#FF3B30",
+        fontWeight: "bold",
+        fontSize: 13
+    },
+
+    completeBtn: {
+        color: "#34C759",
+        fontWeight: "bold",
+        fontSize: 13
+    },
+
     container: { flex: 1 },
     content: { flex: 1, padding: 16 },
 
