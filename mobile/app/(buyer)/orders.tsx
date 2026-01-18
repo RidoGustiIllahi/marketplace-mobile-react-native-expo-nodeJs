@@ -1,13 +1,8 @@
 import {
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    Image,
-    ActivityIndicator,
-    RefreshControl,
-    Alert
+    View, Text, StyleSheet, FlatList, Image,
+    ActivityIndicator, RefreshControl, Alert, TouchableOpacity, SafeAreaView
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import BuyerHeader from '../../components/buyer/BuyerHeader';
 import BuyerBottomNav from '../../components/buyer/BuyerBottomNav';
 import { useBuyerOrders } from '../../hooks/buyer/useBuyerOrders';
@@ -17,209 +12,185 @@ const IMAGE_URL = 'http://10.22.209.58:3001/';
 export default function BuyerOrders() {
     const { orders, loading, refresh, changeStatus } = useBuyerOrders();
 
+    // Helper untuk warna status
+    const getStatusStyle = (status: string) => {
+        switch (status) {
+            case 'ordered': return { bg: '#E3F2FD', text: '#1976D2', label: 'Menunggu' };
+            case 'shipped': return { bg: '#FFF3E0', text: '#F57C00', label: 'Dikirim' };
+            case 'completed': return { bg: '#E8F5E9', text: '#388E3C', label: 'Selesai' };
+            case 'cancelled': return { bg: '#FFEBEE', text: '#D32F2F', label: 'Dibatalkan' };
+            default: return { bg: '#F5F5F5', text: '#616161', label: status };
+        }
+    };
 
-    const renderItem = ({ item }: any) => (
-        <View style={styles.card}>
-            <View style={styles.row}>
-                <Image
-                    source={{ uri: IMAGE_URL + item.product.image }}
-                    style={styles.image}
-                />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.productName}>
-                        {item.product.name}
-                    </Text>
-                    <Text style={styles.qty}>
-                        Jumlah: {item.quantity}
-                    </Text>
-                    <Text style={styles.price}>
-                        Total: Rp {Number(item.total_price).toLocaleString()}
-                    </Text>
-                </View>
-            </View>
+    const renderItem = ({ item }: any) => {
+        const statusConfig = getStatusStyle(item.status);
 
-            <View style={styles.footer}>
-                <Text style={[
-                    styles.status,
-                    styles[item.status as keyof typeof styles]
-                ]}>
-                    {item.status.toUpperCase()}
-                </Text>
-                <Text style={styles.date}>
-                    {new Date(item.createdAt).toLocaleDateString()}
-                </Text>
-            </View>
-
-            <View style={styles.footer}>
-                <View>
-                    <Text style={[
-                        styles.status,
-                        styles[item.status as keyof typeof styles]
-                    ]}>
-                        {item.status.toUpperCase()}
-                    </Text>
-                    <Text style={styles.date}>
-                        {new Date(item.createdAt).toLocaleDateString()}
-                    </Text>
+        return (
+            <View style={styles.card}>
+                {/* Header Card: Tanggal & Status */}
+                <View style={styles.cardHeader}>
+                    <View style={styles.dateContainer}>
+                        <Ionicons name="calendar-outline" size={14} color="#888" />
+                        <Text style={styles.dateText}>
+                            {new Date(item.createdAt).toLocaleDateString('id-ID', {
+                                day: 'numeric', month: 'short', year: 'numeric'
+                            })}
+                        </Text>
+                    </View>
+                    <View style={[styles.statusBadge, { backgroundColor: statusConfig.bg }]}>
+                        <Text style={[styles.statusText, { color: statusConfig.text }]}>
+                            {statusConfig.label}
+                        </Text>
+                    </View>
                 </View>
 
-                {/* ACTION BUTTON */}
-                {item.status === "ordered" && (
-                    <Text
-                        style={styles.cancelBtn}
-                        onPress={() => {
-                            Alert.alert(
-                                "Konfirmasi",
-                                "Yakin ingin membatalkan pesanan?",
-                                [
-                                    { text: "Batal", style: "cancel" },
-                                    { text: "Ya", onPress: () => changeStatus(item.id_order, "cancelled") }
-                                ]
-                            );
-                        }
-                        }
-                    >
-                        Batalkan
-                    </Text>
-                )}
+                {/* Body Card: Produk Info */}
+                <View style={styles.productRow}>
+                    <Image  
+                        source={{ uri: IMAGE_URL + item.product.image }}
+                        style={styles.productImage}
+                    />
+                    <View style={styles.productInfo}>
+                        <Text style={styles.productName} numberOfLines={1}>{item.product.name}</Text>
+                        <Text style={styles.productQty}>{item.quantity} Barang</Text>
+                        <Text style={styles.totalLabel}>Total Belanja:</Text>
+                        <Text style={styles.totalPrice}>Rp {Number(item.total_price).toLocaleString()}</Text>
+                    </View>
+                </View>
 
-                {item.status === "shipped" && (
-                    <Text
-                        style={styles.completeBtn}
-                        onPress={() => {
-                            Alert.alert(
-                                "Konfirmasi",
-                                "Konfirmasi pesanan sudah diterima?",
-                                [
-                                    { text: "Belum", style: "cancel" },
-                                    { text: "Sudah", onPress: () => changeStatus(item.id_order, "completed") }
-                                ]
-                            );
-                        }
-                        }
-                    >
-                        Pesanan Selesai
-                    </Text>
+                {/* Footer Card: Action Buttons */}
+                {(item.status === "ordered" || item.status === "shipped") && (
+                    <View style={styles.cardFooter}>
+                        {item.status === "ordered" && (
+                            <TouchableOpacity
+                                style={styles.outlineBtn}
+                                onPress={() => {
+                                    Alert.alert("Batalkan Pesanan", "Apakah Anda yakin?", [
+                                        { text: "Tidak", style: "cancel" },
+                                        { text: "Ya, Batal", onPress: () => changeStatus(item.id_order, "cancelled") }
+                                    ]);
+                                }}
+                            >
+                                <Text style={styles.outlineBtnText}>Batalkan</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {item.status === "shipped" && (
+                            <TouchableOpacity
+                                style={styles.primaryBtn}
+                                onPress={() => {
+                                    Alert.alert("Selesaikan Pesanan", "Sudah menerima barang?", [
+                                        { text: "Belum", style: "cancel" },
+                                        { text: "Sudah", onPress: () => changeStatus(item.id_order, "completed") }
+                                    ]);
+                                }}
+                            >
+                                <Text style={styles.primaryBtnText}>Pesanan Diterima</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 )}
             </View>
-
-        </View>
-    );
+        );
+    };
 
     return (
-        <View style={styles.container}>
-            <BuyerHeader title="Pesanan Saya" />
+        <SafeAreaView style={styles.container}>
+            <BuyerHeader title="Daftar Pesanan" />
 
             <View style={styles.content}>
-                {loading ? (
-                    <ActivityIndicator size="large" />
-                ) : orders.length === 0 ? (
-                    <Text style={styles.empty}>
-                        Belum ada pesanan
-                    </Text>
+                {loading && orders.length === 0 ? (
+                    <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 50 }} />
                 ) : (
                     <FlatList
                         data={orders}
                         keyExtractor={(item) => item.id_order.toString()}
                         renderItem={renderItem}
+                        contentContainerStyle={styles.listContainer}
                         refreshControl={
-                            <RefreshControl
-                                refreshing={loading}
-                                onRefresh={refresh}
-                            />
+                            <RefreshControl refreshing={loading} onRefresh={refresh} />
                         }
-                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={
+                            <View style={styles.emptyState}>
+                                <Ionicons name="receipt-outline" size={80} color="#DDD" />
+                                <Text style={styles.emptyText}>Belum ada riwayat pesanan</Text>
+                            </View>
+                        }
                     />
                 )}
             </View>
 
             <BuyerBottomNav />
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: '#F8F9FA' },
+    content: { flex: 1 },
+    listContainer: { padding: 16, paddingBottom: 100 },
 
-    cancelBtn: {
-        color: "#FF3B30",
-        fontWeight: "bold",
-        fontSize: 13
-    },
-
-    completeBtn: {
-        color: "#34C759",
-        fontWeight: "bold",
-        fontSize: 13
-    },
-
-    container: { flex: 1 },
-    content: { flex: 1, padding: 16 },
-
+    // Card Styles
     card: {
-        backgroundColor: "#fff",
-        borderRadius: 12,
-        padding: 12,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#F0F0F0',
+        paddingBottom: 12,
         marginBottom: 12,
-        elevation: 2
     },
+    dateContainer: { flexDirection: 'row', alignItems: 'center' },
+    dateText: { fontSize: 12, color: '#888', marginLeft: 4 },
+    statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
+    statusText: { fontSize: 11, fontWeight: '700' },
 
-    row: {
-        flexDirection: "row",
-        marginBottom: 8
+    // Product Info
+    productRow: { flexDirection: 'row', alignItems: 'center' },
+    productImage: { width: 70, height: 70, borderRadius: 12, backgroundColor: '#F5F5F5' },
+    productInfo: { flex: 1, marginLeft: 16 },
+    productName: { fontSize: 15, fontWeight: 'bold', color: '#333' },
+    productQty: { fontSize: 13, color: '#777', marginTop: 2 },
+    totalLabel: { fontSize: 11, color: '#AAA', marginTop: 8 },
+    totalPrice: { fontSize: 15, fontWeight: 'bold', color: '#007AFF' },
+
+    // Footer & Buttons
+    cardFooter: {
+        marginTop: 16,
+        paddingTop: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#F0F0F0',
+        alignItems: 'flex-end',
     },
-
-    image: {
-        width: 70,
-        height: 70,
-        borderRadius: 8,
-        marginRight: 12
+    primaryBtn: {
+        backgroundColor: '#007AFF',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 10,
     },
-
-    productName: {
-        fontWeight: "600",
-        fontSize: 15
+    primaryBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
+    outlineBtn: {
+        borderWidth: 1,
+        borderColor: '#FF3B30',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 10,
     },
+    outlineBtnText: { color: '#FF3B30', fontWeight: 'bold', fontSize: 13 },
 
-    qty: {
-        fontSize: 13,
-        color: "#666",
-        marginTop: 4
-    },
-
-    price: {
-        fontWeight: "bold",
-        marginTop: 6
-    },
-
-    footer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
-    },
-
-    status: {
-        fontSize: 12,
-        fontWeight: "bold",
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 20,
-        overflow: "hidden",
-        color: "#fff"
-    },
-
-    ordered: { backgroundColor: "#007AFF" },
-    shipped: { backgroundColor: "#FF9500" },
-    completed: { backgroundColor: "#34C759" },
-    cancelled: { backgroundColor: "#FF3B30" },
-
-    date: {
-        fontSize: 12,
-        color: "#888"
-    },
-
-    empty: {
-        textAlign: "center",
-        marginTop: 40,
-        color: "#666"
-    }
+    // Empty State
+    emptyState: { marginTop: 100, alignItems: 'center' },
+    emptyText: { marginTop: 16, fontSize: 16, color: '#AAA' }
 });
