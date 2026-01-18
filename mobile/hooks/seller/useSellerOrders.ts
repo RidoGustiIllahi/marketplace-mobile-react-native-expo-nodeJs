@@ -3,9 +3,13 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getOrdersBySeller, updateOrderStatus } from "../../services/orderService";
 
+type OrderStatus = "all" | "ordered" | "shipped" | "completed" | "cancelled";
+
 export const useSellerOrders = () => {
     const [orders, setOrders] = useState<any[]>([]);
+    const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [statusFilter, setStatusFilter] = useState<OrderStatus>("all");
 
     const fetchOrders = async () => {
         try {
@@ -15,11 +19,27 @@ export const useSellerOrders = () => {
 
             const data = await getOrdersBySeller(Number(id_user));
             setOrders(data);
+            applyFilter(data, statusFilter);
         } catch (err) {
             Alert.alert("Error", "Gagal memuat pesanan");
         } finally {
             setLoading(false);
         }
+    };
+
+    const applyFilter = (data: any[], filter: OrderStatus) => {
+        if (filter === "all") {
+            setFilteredOrders(data);
+        } else {
+            setFilteredOrders(
+                data.filter(order => order.status === filter)
+            );
+        }
+    };
+
+    const changeFilter = (filter: OrderStatus) => {
+        setStatusFilter(filter);
+        applyFilter(orders, filter);
     };
 
     const shipOrder = async (id_order: number) => {
@@ -40,9 +60,11 @@ export const useSellerOrders = () => {
     }, []);
 
     return {
-        orders,
+        orders: filteredOrders,
         loading,
         refresh: fetchOrders,
-        shipOrder
+        shipOrder,
+        statusFilter,
+        changeFilter
     };
 };
