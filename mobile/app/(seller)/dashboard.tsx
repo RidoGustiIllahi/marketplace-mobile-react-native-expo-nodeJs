@@ -5,6 +5,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import SellerHeader from '../../components/seller/SellerHeader';
 import { useSellerOrders } from '../../hooks/seller/useSellerOrders';
+import OrderPieChart from "../../components/seller/OrderPieChart";
+import { useOrderStats } from "../../hooks/seller/useOrderStats";
 
 const IMAGE_URL = 'http://10.22.209.58:3001/';
 
@@ -13,6 +15,8 @@ export default function SellerDashboard() {
         orders, loading, refresh, shipOrder, statusFilter, changeFilter
     } = useSellerOrders();
 
+    const stats = useOrderStats(orders);
+    
     const FILTERS = [
         { label: "Semua", value: "all" },
         { label: "Baru", value: "ordered" },
@@ -74,6 +78,10 @@ export default function SellerDashboard() {
     return (
         <SafeAreaView style={styles.container}>
             <SellerHeader title="Dashboard Penjual" />
+            {!loading && (
+                <OrderPieChart stats={stats} />
+            )}
+
 
             <View>
                 <ScrollView
