@@ -11,3 +11,8 @@ export const createOrder = async (payload: CreateOrderPayload) => {
     const res = await api.post("/orders", payload);
     return res.data;
 };
+
+export const getOrdersByUser = async (id_user: number) => {
+    const res = await api.get(`/orders/user/${id_user}`);
+    return res.data;
+};

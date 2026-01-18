@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, ActivityIn
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useOrder } from "../../hooks/buyer/useOrder";
-import BuyerHeader from '../BuyerHeader';
+import BuyerHeader from './BuyerHeader';
 
 const IMAGE_URL = 'http://10.22.209.58:3001/';
 

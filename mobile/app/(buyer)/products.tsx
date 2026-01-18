@@ -1,6 +1,6 @@
 import { View, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
-import BuyerHeader from '../../components/BuyerHeader';
-import BuyerBottomNav from '../../components/BuyerBottomNav';
+import BuyerHeader from '../../components/buyer/BuyerHeader';
+import BuyerBottomNav from '../../components/buyer/BuyerBottomNav';
 import CheckoutScreen from '../../components/buyer/CheckoutScreen';
 
 import { useProducts } from '../../hooks/buyer/useProducts';

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
-import BuyerHeader from '../../components/BuyerHeader';
-import BuyerBottomNav from '../../components/BuyerBottomNav';
+import BuyerHeader from '../../components/buyer/BuyerHeader';
+import BuyerBottomNav from '../../components/buyer/BuyerBottomNav';
 
 export default function BuyerChat() {
     return (

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import LogoutButton from './LogoutButton';
+import LogoutButton from '../LogoutButton';
 
 export default function BuyerHeader({ title }: { title: string }) {
     return (
