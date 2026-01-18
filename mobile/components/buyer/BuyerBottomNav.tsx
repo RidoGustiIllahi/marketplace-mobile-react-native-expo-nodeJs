@@ -26,11 +26,20 @@ export default function BuyerBottomNav() {
 
 const styles = StyleSheet.create({
     nav: {
+        position: 'absolute',
+        bottom: 25,
+        left: 20,
+        right: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingVertical: 30,
-        backgroundColor: '#FFF',
-        borderTopWidth: 1,
-        borderTopColor: '#E5E5EA',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        height: 65,
+        borderRadius: 20,
+        elevation: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
 });

@@ -16,7 +16,7 @@ export default function SellerDashboard() {
     } = useSellerOrders();
 
     const stats = useOrderStats(orders);
-    
+
     const FILTERS = [
         { label: "Semua", value: "all" },
         { label: "Baru", value: "ordered" },
@@ -78,10 +78,6 @@ export default function SellerDashboard() {
     return (
         <SafeAreaView style={styles.container}>
             <SellerHeader title="Dashboard Penjual" />
-            {!loading && (
-                <OrderPieChart stats={stats} />
-            )}
-
 
             <View>
                 <ScrollView
@@ -114,6 +110,13 @@ export default function SellerDashboard() {
                         renderItem={renderItem}
                         contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
                         refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} />}
+                        ListHeaderComponent={
+                            !loading ? (
+                                <View>
+                                    <OrderPieChart stats={stats} />
+                                </View>
+                            ) : null
+                        }
                         ListEmptyComponent={
                             <View style={styles.emptyContainer}>
                                 <Ionicons name="file-tray-outline" size={64} color="#DDD" />
@@ -128,31 +131,129 @@ export default function SellerDashboard() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F0F2F5' },
-    filterBar: { backgroundColor: '#FFF', paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#E0E0E0' },
-    chip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: '#F0F2F5', marginRight: 8, borderWidth: 1, borderColor: '#DDD' },
-    activeChip: { backgroundColor: '#007AFF', borderColor: '#007AFF' },
-    chipText: { fontSize: 13, color: '#666', fontWeight: '600' },
-    activeChipText: { color: '#FFF' },
-
-    content: { flex: 1 },
-    card: { backgroundColor: '#FFF', borderRadius: 12, padding: 16, marginBottom: 16, elevation: 3, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 4, shadowOffset: { width: 0, height: 2 } },
-    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, borderBottomWidth: 1, borderBottomColor: '#F0F0F0', paddingBottom: 10 },
-    buyerInfo: { flexDirection: 'row', alignItems: 'center' },
-    buyerName: { fontSize: 14, fontWeight: 'bold', marginLeft: 6, color: '#444' },
-    statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-    statusText: { fontSize: 10, fontWeight: 'bold' },
-
-    productRow: { flexDirection: 'row', marginBottom: 15 },
-    image: { width: 60, height: 60, borderRadius: 8, backgroundColor: '#F8F8F8' },
-    details: { flex: 1, marginLeft: 12 },
-    productName: { fontSize: 15, fontWeight: 'bold', color: '#333' },
-    qtyText: { fontSize: 13, color: '#888', marginTop: 2 },
-    totalPrice: { fontSize: 16, fontWeight: 'bold', color: '#007AFF', marginTop: 4 },
-
-    shipBtn: { backgroundColor: '#007AFF', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 10, borderRadius: 8, marginTop: 5 },
-    shipBtnText: { color: '#FFF', fontWeight: 'bold', fontSize: 14 },
-
-    emptyContainer: { alignItems: 'center', marginTop: 80 },
-    empty: { fontSize: 14, color: '#999', marginTop: 12 }
+    container: {
+        flex: 1,
+        backgroundColor: '#F8F9FA',
+    },
+    filterBar: {
+        paddingVertical: 12,
+        paddingLeft: 16,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#EEE',
+    },
+    chip: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 20,
+        backgroundColor: '#F0F2F5',
+        marginRight: 10,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    activeChip: {
+        backgroundColor: '#192f6a',
+        borderColor: '#192f6a',
+    },
+    chipText: {
+        fontSize: 13,
+        color: '#666',
+        fontWeight: '600',
+    },
+    activeChipText: {
+        color: '#FFF',
+    },
+    content: {
+        flex: 1,
+    },
+    card: {
+        backgroundColor: '#FFF',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 3,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+        paddingBottom: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F5F5F5',
+    },
+    buyerInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    buyerName: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#333',
+        marginLeft: 6,
+    },
+    statusBadge: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+    },
+    statusText: {
+        fontSize: 10,
+        fontWeight: '800',
+    },
+    productRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    image: {
+        width: 65,
+        height: 65,
+        borderRadius: 10,
+        backgroundColor: '#F9F9F9',
+    },
+    details: {
+        flex: 1,
+        marginLeft: 12,
+    },
+    productName: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#333',
+    },
+    qtyText: {
+        fontSize: 12,
+        color: '#888',
+        marginVertical: 2,
+    },
+    totalPrice: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: '#192f6a',
+    },
+    shipBtn: {
+        backgroundColor: '#192f6a',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 15,
+    },
+    shipBtnText: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: '700',
+    },
+    emptyContainer: {
+        alignItems: 'center',
+        marginTop: 60,
+    },
+    empty: {
+        color: '#AAA',
+        marginTop: 10,
+    }
 });

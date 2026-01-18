@@ -92,16 +92,78 @@ export default function Register() {
 }
 
 const styles = StyleSheet.create({
-    background: { position: 'absolute', left: 0, right: 0, top: 0, height: '100%' },
-    scrollContainer: { paddingVertical: 60, alignItems: 'center' },
-    card: { width: '90%', backgroundColor: 'white', borderRadius: 20, padding: 25, elevation: 5, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10 },
-    title: { fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' },
-    subtitle: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 25 },
-    inputGroup: { marginBottom: 15 },
-    label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 5 },
-    input: { backgroundColor: '#f9f9f9', padding: 12, borderRadius: 10, borderWidth: 1, borderColor: '#eee' },
-    button: { backgroundColor: '#3b5998', padding: 15, borderRadius: 10, marginTop: 20, alignItems: 'center' },
-    buttonText: { color: 'white', fontWeight: 'bold', fontSize: 16 },
-    footerText: { textAlign: 'center', marginTop: 20, color: '#666' },
-    link: { color: '#3b5998', fontWeight: 'bold' }
+    background: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 300, // Background hanya di bagian atas untuk memberi kesan kedalaman
+    },
+    scrollContainer: {
+        paddingTop: 60,
+        paddingBottom: 40,
+        paddingHorizontal: 20,
+    },
+    card: {
+        backgroundColor: '#fff',
+        borderRadius: 25,
+        padding: 25,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+        elevation: 15,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: '800',
+        color: '#192f6a',
+        textAlign: 'center',
+    },
+    subtitle: {
+        fontSize: 15,
+        color: '#777',
+        textAlign: 'center',
+        marginBottom: 30,
+    },
+    inputGroup: {
+        marginBottom: 18,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#3b5998',
+        marginBottom: 8,
+        marginLeft: 4,
+    },
+    input: {
+        backgroundColor: '#f8f9fa',
+        borderRadius: 12,
+        paddingHorizontal: 15,
+        paddingVertical: 12,
+        borderWidth: 1,
+        borderColor: '#eee',
+        fontSize: 15,
+    },
+    button: {
+        backgroundColor: '#3b5998',
+        borderRadius: 12,
+        paddingVertical: 16,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    footerText: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: '#666',
+    },
+    link: {
+        color: '#3b5998',
+        fontWeight: 'bold',
+    }
 });

@@ -67,23 +67,34 @@ export default function Products() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F8F9FA' },
-    listContent: { padding: 16, paddingBottom: 100 },
+    container: {
+        flex: 1,
+        backgroundColor: '#F8F9FA',
+    },
+    listContent: {
+        padding: 16,
+        paddingBottom: 120, // Agar tidak tertutup FAB/Nav
+    },
     fab: {
         position: 'absolute',
         right: 20,
-        bottom: 20,
-        backgroundColor: '#007AFF',
-        width: 56,
-        height: 56,
-        borderRadius: 28,
+        bottom: 100, // Sesuaikan agar di atas BottomNav
+        backgroundColor: '#192f6a',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 5,
+        elevation: 8,
         shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
-        shadowOffset: { width: 0, height: 2 },
     },
-    emptyText: { textAlign: 'center', marginTop: 50, color: '#999', fontSize: 16 }
+    emptyText: {
+        textAlign: 'center',
+        color: '#999',
+        marginTop: 50,
+        fontSize: 16,
+    }
 });

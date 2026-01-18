@@ -40,27 +40,80 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
         borderRadius: 16,
-        flexDirection: 'row',
         padding: 12,
-        marginBottom: 12,
+        marginBottom: 16,
+        flexDirection: 'row', // Layout menyamping
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 3,
         borderWidth: 1,
-        borderColor: '#EDF0F2',
+        borderColor: '#f0f0f0',
     },
-    image: { width: 90, height: 90, borderRadius: 12, backgroundColor: '#f0f0f0' },
-    info: { flex: 1, marginLeft: 15, justifyContent: 'space-between' },
-    name: { fontSize: 16, fontWeight: '700', color: '#1A1A1A' },
-    price: { fontSize: 15, color: '#007AFF', fontWeight: '600', marginTop: 2 },
-    stockRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-    stockText: { fontSize: 13, color: '#666' },
-    actions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8 },
-    btnAction: {
+    image: {
+        width: 85,
+        height: 85,
+        borderRadius: 12,
+        backgroundColor: '#f8f9fa',
+    },
+    info: {
+        flex: 1,
+        marginLeft: 15,
+        justifyContent: 'space-between',
+        flexDirection: 'row', // Memisahkan teks dan tombol aksi
+        alignItems: 'center',
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#192f6a', // Biru gelap tema utama
+        marginBottom: 4,
+    },
+    price: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#3b5998',
+        marginBottom: 6,
+    },
+    stockRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 8
+        backgroundColor: '#f0f2f5',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 6,
+        alignSelf: 'flex-start',
     },
-    editBtn: { backgroundColor: '#E5F1FF' },
-    deleteBtn: { backgroundColor: '#FFEBEA' },
-    editText: { color: '#007AFF', fontSize: 12, fontWeight: 'bold', marginLeft: 4 }
+    stockText: {
+        fontSize: 11,
+        color: '#666',
+        fontWeight: '600',
+    },
+    actions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    btnAction: {
+        padding: 10,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    editBtn: {
+        backgroundColor: '#E3F2FD', // Biru muda pastel
+        marginRight: 8,
+        paddingHorizontal: 12,
+    },
+    editText: {
+        color: '#007AFF',
+        fontSize: 12,
+        fontWeight: '700',
+        marginLeft: 4,
+    },
+    deleteBtn: {
+        backgroundColor: '#FFEBEE', // Merah muda pastel
+    },
 });

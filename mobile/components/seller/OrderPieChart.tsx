@@ -84,17 +84,14 @@ export default function OrderPieChart({ stats }: any) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#fff",
+        backgroundColor: '#FFF',
+        margin: 16,
+        padding: 16,
         borderRadius: 20,
-        padding: 20,
-        marginHorizontal: 16,
-        marginBottom: 20,
-        // Shadow modern
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        elevation: 4,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 2,
     },
     headerRow: {
         flexDirection: 'row',
@@ -102,51 +99,48 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     title: {
-        fontWeight: "800",
-        fontSize: 17,
-        color: "#1A1A1A",
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#192f6a',
         marginLeft: 8,
     },
     chartWrapper: {
-        alignItems: 'center',
-        marginLeft: -10, // Menyeimbangkan posisi chart kit yang biasanya agak ke kanan
+        alignItems: 'center', // Pusatkan chart
+        justifyContent: 'center',
+        marginVertical: 10,
     },
     footer: {
         marginTop: 10,
-        paddingTop: 15,
         borderTopWidth: 1,
-        borderTopColor: '#F0F0F0',
-        alignItems: 'center',
+        borderTopColor: '#F5F5F5',
+        paddingTop: 10,
     },
     totalBadge: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#F8F9FA',
+        padding: 12,
+        borderRadius: 12,
     },
     totalLabel: {
         fontSize: 12,
-        color: '#999',
-        textTransform: 'uppercase',
-        letterSpacing: 1,
+        color: '#666',
+        fontWeight: '500',
     },
     totalValue: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1A1A1A',
-        marginTop: 2,
+        fontSize: 14,
+        fontWeight: '800',
+        color: '#192f6a',
     },
     emptyContainer: {
+        height: 150,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 150,
-        borderStyle: 'dashed',
-        borderWidth: 1,
-        borderColor: '#DDD',
-        backgroundColor: 'transparent',
-        elevation: 0,
-        shadowOpacity: 0,
     },
     emptyText: {
-        marginTop: 10,
         color: '#AAA',
-        fontSize: 14,
+        marginTop: 8,
+        fontSize: 13,
     }
 });

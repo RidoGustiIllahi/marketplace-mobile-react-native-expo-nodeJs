@@ -23,6 +23,7 @@ export default function CheckoutScreen({ product, quantity, setQuantity, buyerAd
                         <Image source={{ uri: IMAGE_URL + product.image }} style={styles.thumb} />
                         <View style={styles.productDetail}>
                             <Text style={styles.productName}>{product.name}</Text>
+                            <Text style={styles.productDescription}>{product.description}</Text>
                             <Text style={styles.productPrice}>Rp {Number(product.price).toLocaleString()}</Text>
                         </View>
                     </View>
@@ -134,44 +135,190 @@ const Row = ({ label, value, bold }: any) => (
 );
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F8F9FA' },
-    scroll: { padding: 16 },
-    sectionCard: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16 },
-    productRow: { flexDirection: 'row', alignItems: 'center' },
-    thumb: { width: 70, height: 70, borderRadius: 12, backgroundColor: '#f0f0f0' },
-    productDetail: { marginLeft: 16, flex: 1 },
-    productName: { fontSize: 16, fontWeight: 'bold', color: '#1A1A1A' },
-    productPrice: { fontSize: 14, color: '#007AFF', marginTop: 4, fontWeight: '600' },
-    sectionTitle: { fontSize: 15, fontWeight: 'bold', color: '#1A1A1A', marginBottom: 16 },
-    sectionTitleSmall: { fontSize: 13, fontWeight: 'bold', color: '#777', marginBottom: 8 },
-
-    // Address Timeline
-    addressWrapper: { flexDirection: 'row' },
-    timeline: { alignItems: 'center', width: 20, marginRight: 12 },
-    dot: { width: 8, height: 8, borderRadius: 4 },
-    line: { width: 1, flex: 1, backgroundColor: '#E0E0E0', marginVertical: 4 },
-    addressTextWrapper: { flex: 1 },
-    addressItem: { marginBottom: 20 },
-    addressLabel: { fontSize: 11, fontWeight: 'bold', color: '#AAA', textTransform: 'uppercase' },
-    addressContent: { fontSize: 14, color: '#333', marginTop: 2 },
-
+    container: {
+        flex: 1,
+        backgroundColor: '#f8f9fa',
+    },
+    scroll: {
+        padding: 20,
+        paddingBottom: 40,
+    },
+    sectionCard: {
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 3,
+    },
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#192f6a',
+        marginBottom: 15,
+    },
+    sectionTitleSmall: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: '#3b5998',
+        marginBottom: 8,
+    },
+    // Item Card Style
+    productRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    thumb: {
+        width: 70,
+        height: 70,
+        borderRadius: 12,
+        backgroundColor: '#f0f0f0',
+    },
+    productDetail: {
+        marginLeft: 15,
+        flex: 1,
+    },
+    productName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#333',
+    },
+    productDescription: {
+        fontSize: 12,
+        color: '#777',
+        marginTop: 2,
+        lineHeight: 16, // Memberikan ruang antar baris agar mudah dibaca
+    },
+    productPrice: {
+        fontSize: 14,
+        color: '#3b5998',
+        fontWeight: '700',
+        marginTop: 4,
+    },
+    // Address Timeline Style
+    addressWrapper: {
+        flexDirection: 'row',
+    },
+    timeline: {
+        alignItems: 'center',
+        marginRight: 12,
+        paddingVertical: 5,
+    },
+    dot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+    },
+    line: {
+        width: 2,
+        flex: 1,
+        backgroundColor: '#eee',
+        marginVertical: 4,
+    },
+    addressTextWrapper: {
+        flex: 1,
+    },
+    addressItem: {
+        marginBottom: 15,
+    },
+    addressLabel: {
+        fontSize: 11,
+        color: '#999',
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+    },
+    addressContent: {
+        fontSize: 14,
+        color: '#444',
+        fontWeight: '500',
+        marginTop: 2,
+    },
     // Controls
-    rowBetween: { flexDirection: 'row', marginBottom: 16 },
-    stepper: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#F5F7FA', borderRadius: 10, padding: 5 },
-    stepBtn: { backgroundColor: '#fff', padding: 6, borderRadius: 8, elevation: 1 },
-    qtyText: { fontSize: 16, fontWeight: 'bold' },
-    pickerWrapper: { backgroundColor: '#F5F7FA', borderRadius: 10, justifyContent: 'center' },
-
-    // Summary
-    summaryCard: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 20, borderWidth: 1, borderColor: '#E5F1FF' },
-    divider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 12 },
-    rowLabel: { color: '#666', fontSize: 14 },
-    rowValue: { color: '#1A1A1A', fontSize: 14 },
-    boldText: { fontWeight: 'bold', color: '#1A1A1A', fontSize: 16 },
-
-    mainBtn: { backgroundColor: '#007AFF', height: 55, borderRadius: 16, justifyContent: 'center', alignItems: 'center', elevation: 4 },
-    disabledBtn: { backgroundColor: '#A0CFFF' },
-    mainBtnText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-    backBtn: { marginTop: 15, alignItems: 'center', padding: 10 },
-    backBtnText: { color: '#888', textDecorationLine: 'underline' }
+    rowBetween: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    stepper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#f0f2f5',
+        borderRadius: 10,
+        padding: 4,
+    },
+    stepBtn: {
+        backgroundColor: '#fff',
+        padding: 6,
+        borderRadius: 8,
+        elevation: 1,
+    },
+    qtyText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#192f6a',
+    },
+    pickerWrapper: {
+        backgroundColor: '#f0f2f5',
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    // Summary Card
+    summaryCard: {
+        backgroundColor: '#192f6a', // Kontras gelap yang elegan
+        borderRadius: 16,
+        padding: 20,
+        marginBottom: 20,
+    },
+    rowLabel: {
+        color: 'rgba(255,255,255,0.7)',
+        fontSize: 14,
+    },
+    rowValue: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    boldText: {
+        fontSize: 18,
+        fontWeight: '800',
+        color: '#fff',
+    },
+    divider: {
+        height: 1,
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        marginVertical: 12,
+    },
+    // Buttons
+    mainBtn: {
+        backgroundColor: '#3b5998',
+        borderRadius: 14,
+        paddingVertical: 18,
+        alignItems: 'center',
+        shadowColor: '#3b5998',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 5,
+    },
+    mainBtnText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    disabledBtn: {
+        backgroundColor: '#ccc',
+        shadowOpacity: 0,
+    },
+    backBtn: {
+        marginTop: 15,
+        alignItems: 'center',
+        padding: 10,
+    },
+    backBtnText: {
+        color: '#999',
+        fontSize: 14,
+    },
 });

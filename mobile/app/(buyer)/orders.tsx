@@ -47,7 +47,7 @@ export default function BuyerOrders() {
 
                 {/* Body Card: Produk Info */}
                 <View style={styles.productRow}>
-                    <Image  
+                    <Image
                         source={{ uri: IMAGE_URL + item.product.image }}
                         style={styles.productImage}
                     />
@@ -127,22 +127,31 @@ export default function BuyerOrders() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F8F9FA' },
-    content: { flex: 1 },
-    listContainer: { padding: 16, paddingBottom: 100 },
-
-    // Card Styles
+    container: {
+        flex: 1,
+        backgroundColor: '#F8F9FA', // Background abu-abu sangat muda
+    },
+    content: {
+        flex: 1,
+    },
+    listContainer: {
+        padding: 16,
+        paddingBottom: 100, // Ruang untuk bottom nav
+    },
     card: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF',
         borderRadius: 16,
         padding: 16,
         marginBottom: 16,
-        elevation: 2,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: '#F0F0F0',
     },
+    // Header: Tanggal & Badge
     cardHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -152,45 +161,105 @@ const styles = StyleSheet.create({
         paddingBottom: 12,
         marginBottom: 12,
     },
-    dateContainer: { flexDirection: 'row', alignItems: 'center' },
-    dateText: { fontSize: 12, color: '#888', marginLeft: 4 },
-    statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: '700' },
-
-    // Product Info
-    productRow: { flexDirection: 'row', alignItems: 'center' },
-    productImage: { width: 70, height: 70, borderRadius: 12, backgroundColor: '#F5F5F5' },
-    productInfo: { flex: 1, marginLeft: 16 },
-    productName: { fontSize: 15, fontWeight: 'bold', color: '#333' },
-    productQty: { fontSize: 13, color: '#777', marginTop: 2 },
-    totalLabel: { fontSize: 11, color: '#AAA', marginTop: 8 },
-    totalPrice: { fontSize: 15, fontWeight: 'bold', color: '#007AFF' },
-
-    // Footer & Buttons
+    dateContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    dateText: {
+        fontSize: 12,
+        color: '#888',
+        marginLeft: 4,
+        fontWeight: '500',
+    },
+    statusBadge: {
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+    statusText: {
+        fontSize: 11,
+        fontWeight: '700',
+        textTransform: 'uppercase',
+    },
+    // Body: Produk
+    productRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    productImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+        backgroundColor: '#F9F9F9',
+    },
+    productInfo: {
+        flex: 1,
+        marginLeft: 15,
+    },
+    productName: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: '#333',
+        marginBottom: 2,
+    },
+    productQty: {
+        fontSize: 13,
+        color: '#777',
+        marginBottom: 8,
+    },
+    totalLabel: {
+        fontSize: 11,
+        color: '#999',
+    },
+    totalPrice: {
+        fontSize: 16,
+        fontWeight: '800',
+        color: '#192F6A', // Biru gelap tema utama
+    },
+    // Footer: Buttons
     cardFooter: {
-        marginTop: 16,
-        paddingTop: 12,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginTop: 15,
+        paddingTop: 15,
         borderTopWidth: 1,
         borderTopColor: '#F0F0F0',
-        alignItems: 'flex-end',
+    },
+    outlineBtn: {
+        paddingHorizontal: 20,
+        paddingVertical: 8,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#D32F2F',
+        marginRight: 10,
+    },
+    outlineBtnText: {
+        color: '#D32F2F',
+        fontSize: 13,
+        fontWeight: '600',
     },
     primaryBtn: {
-        backgroundColor: '#007AFF',
-        paddingHorizontal: 16,
+        backgroundColor: '#3B5998', // Biru tema
+        paddingHorizontal: 20,
         paddingVertical: 8,
         borderRadius: 10,
+        elevation: 2,
     },
-    primaryBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
-    outlineBtn: {
-        borderWidth: 1,
-        borderColor: '#FF3B30',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        borderRadius: 10,
+    primaryBtnText: {
+        color: '#FFF',
+        fontSize: 13,
+        fontWeight: '700',
     },
-    outlineBtnText: { color: '#FF3B30', fontWeight: 'bold', fontSize: 13 },
-
     // Empty State
-    emptyState: { marginTop: 100, alignItems: 'center' },
-    emptyText: { marginTop: 16, fontSize: 16, color: '#AAA' }
+    emptyState: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 100,
+    },
+    emptyText: {
+        fontSize: 16,
+        color: '#AAA',
+        marginTop: 10,
+        fontWeight: '500',
+    },
 });

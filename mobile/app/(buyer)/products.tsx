@@ -35,6 +35,9 @@ export default function BuyerProducts() {
                 ) : (
                     <FlatList
                         data={products}
+                        numColumns={2} 
+                        contentContainerStyle={{ padding: 10, paddingBottom: 100 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
                         keyExtractor={(i) => i.id_product.toString()}
                         renderItem={({ item }) => (
                             <ProductCard item={item} onSelect={setSelectedProduct} />

@@ -22,11 +22,42 @@ export default function RoleSelector({ role, setRole }: any) {
 };
 
 const styles = StyleSheet.create({
-    mainContainer: { marginBottom: 15 },
-    label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 8 },
-    container: { flexDirection: 'row', gap: 10 },
-    button: { flex: 1, paddingVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: '#ddd', alignItems: 'center', backgroundColor: '#fff' },
-    active: { backgroundColor: '#3b5998', borderColor: '#3b5998' },
-    text: { color: '#666', fontWeight: '500' },
-    textActive: { color: '#fff', fontWeight: 'bold' }
+    mainContainer: {
+        marginBottom: 20,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#3b5998',
+        marginBottom: 10,
+    },
+    container: {
+        flexDirection: 'row',
+        backgroundColor: '#f0f2f5',
+        borderRadius: 12,
+        padding: 4,
+    },
+    button: {
+        flex: 1,
+        paddingVertical: 12,
+        alignItems: 'center',
+        borderRadius: 10,
+    },
+    active: {
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    text: {
+        fontSize: 14,
+        color: '#888',
+        fontWeight: '500',
+    },
+    textActive: {
+        color: '#3b5998',
+        fontWeight: 'bold',
+    },
 });

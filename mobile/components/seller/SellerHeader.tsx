@@ -20,11 +20,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingTop: 50,
         paddingVertical: 15,
+        paddingTop: 50,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
-        borderBottomColor: '#F0F0F0',
+        borderBottomColor: '#f0f0f0',
+        elevation: 2,
     },
-    title: { fontSize: 20, fontWeight: 'bold', color: '#1A1A1A' }
+    title: {
+        fontSize: 20,
+        fontWeight: '800',
+        color: '#192f6a',
+    },
 });

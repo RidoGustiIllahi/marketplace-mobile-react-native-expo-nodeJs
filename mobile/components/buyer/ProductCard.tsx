@@ -27,25 +27,56 @@ export default function ProductCard({ item, onSelect }: any) {
 const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fff',
-        borderRadius: 16,
-        flexDirection: 'row',
-        padding: 12,
-        marginHorizontal: 16,
-        marginBottom: 12,
-        // Shadow untuk iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-        // Shadow untuk Android
+        borderRadius: 15,
+        width: '48%', // Untuk 2 kolom
+        marginBottom: 15,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
         elevation: 3,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
     },
-    image: { width: 90, height: 90, borderRadius: 12, backgroundColor: '#f0f0f0' },
-    info: { flex: 1, marginLeft: 16, justifyContent: 'space-between' },
-    name: { fontSize: 16, fontWeight: '700', color: '#1A1A1A' },
-    description: { fontSize: 13, color: '#777', lineHeight: 18 },
-    footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
-    price: { fontSize: 15, fontWeight: 'bold', color: '#007AFF' },
-    badge: { backgroundColor: '#E5F1FF', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
-    badgeText: { color: '#007AFF', fontSize: 12, fontWeight: 'bold' }
+    image: {
+        width: '100%',
+        height: 150,
+        backgroundColor: '#f9f9f9',
+    },
+    info: {
+        padding: 12,
+    },
+    name: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#333',
+        marginBottom: 4,
+    },
+    description: {
+        fontSize: 12,
+        color: '#777',
+        height: 32,
+        lineHeight: 16,
+    },
+    footer: {
+        flexDirection: 'column',
+        marginTop: 10,
+    },
+    price: {
+        fontSize: 15,
+        fontWeight: '800',
+        color: '#3b5998',
+        marginBottom: 8,
+    },
+    badge: {
+        backgroundColor: '#3b5998',
+        paddingVertical: 6,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    badgeText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: '700',
+    },
 });

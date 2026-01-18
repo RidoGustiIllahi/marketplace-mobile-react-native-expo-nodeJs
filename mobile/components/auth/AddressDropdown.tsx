@@ -11,15 +11,19 @@ import {
 export default function AddressDropdown({ setAddress }: any) {
 
     const dropdownStyle = {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#f8f9fa',
         borderColor: '#eee',
-        borderRadius: 10,
-        marginBottom: 10,
+        borderRadius: 12,
+        marginBottom: 12, // Memberi jarak antar dropdown
     };
 
     const dropContainerStyle = {
+        backgroundColor: '#fff',
         borderColor: '#eee',
         elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.1,
     };
 
     const [province, setProvince] = useState(null);
