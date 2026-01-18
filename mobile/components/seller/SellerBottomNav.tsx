@@ -8,7 +8,7 @@ export default function SellerBottomNav() {
     const tabs = [
         { name: 'Dashboard', icon: 'home-outline', path: '/(seller)/dashboard' },
         { name: 'Produk', icon: 'cube-outline', path: '/(seller)/products' },
-        { name: 'Chat', icon: 'chatbubbles-outline', path: '/(seller)/chat' },
+        { name: 'About', icon: 'chatbubbles-outline', path: '/(seller)/about' },
     ];
 
     return (

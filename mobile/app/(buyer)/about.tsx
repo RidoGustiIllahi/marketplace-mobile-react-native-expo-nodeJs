@@ -8,7 +8,7 @@ export default function BuyerChat() {
             <BuyerHeader title="Chat Penjual" />
 
             <View style={styles.content}>
-                <Text>Daftar Chat Penjual</Text>
+                <Text>about</Text>
             </View>
 
             <BuyerBottomNav />

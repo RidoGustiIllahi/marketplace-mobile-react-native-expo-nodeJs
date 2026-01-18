@@ -19,7 +19,7 @@ export default function BuyerBottomNav() {
         <View style={styles.nav}>
             <NavItem icon="pricetags-outline" route="/(buyer)/products" />
             <NavItem icon="receipt-outline" route="/(buyer)/orders" />
-            <NavItem icon="chatbubble-outline" route="/(buyer)/chat" />
+            <NavItem icon="chatbubble-outline" route="/(buyer)/about" />
         </View>
     );
 }
